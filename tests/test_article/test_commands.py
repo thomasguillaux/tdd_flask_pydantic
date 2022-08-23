@@ -10,9 +10,9 @@ def test_create_article():
     THEN a new Article must exist in the database with the same attributes
     """
     cmd = CreateArticleCommand(
-        author="thomas@guillaux.com",
-        title="Le joueur d'echecs",
-        content="Ouverture du berger"
+        author="john@doe.com",
+        title="New Article",
+        content="Super awesome article"
     )
 
     article = cmd.execute()
@@ -24,7 +24,8 @@ def test_create_article():
     assert db_article.title == article.title
     assert db_article.content == article.content
 
-def test_create_create_article_already_exists():
+
+def test_create_article_already_exists():
     """
     GIVEN CreateArticleCommand with a title of some article in database
     WHEN the execute method is called
@@ -32,9 +33,9 @@ def test_create_create_article_already_exists():
     """
 
     Article(
-        author="thomas@guillaux.com",
-        title="Le joueur d'echecs",
-        content="Ouverture du berger"
+        author="jane@doe.com",
+        title="New Article",
+        content="Super extra awesome article"
     ).save()
 
     cmd = CreateArticleCommand(
@@ -45,7 +46,3 @@ def test_create_create_article_already_exists():
 
     with pytest.raises(AlreadyExists):
         cmd.execute()
-
-
-
-

@@ -6,6 +6,7 @@ from blog.models import Article, NotFound
 class AlreadyExists(Exception):
     pass
 
+
 class CreateArticleCommand(BaseModel):
     author: EmailStr
     title: str
@@ -13,15 +14,15 @@ class CreateArticleCommand(BaseModel):
 
     def execute(self) -> Article:
         try:
-            Article.get_by_id(self.title)
+            Article.get_by_title(self.title)
             raise AlreadyExists
         except NotFound:
             pass
 
         article = Article(
-            author = self.author,
-            title = self.title,
-            content = self.content
+            author=self.author,
+            title=self.title,
+            content=self.content
         ).save()
 
         return article

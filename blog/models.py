@@ -9,6 +9,7 @@ from pydantic import BaseModel, EmailStr, Field
 class NotFound(Exception):
     pass
 
+
 class Article(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     author: EmailStr
@@ -27,8 +28,8 @@ class Article(BaseModel):
 
         if record is None:
             raise NotFound
-        
-        article = cls(**record)
+
+        article = cls(**record)  # Row can be unpacked as dict
         con.close()
 
         return article
@@ -69,7 +70,7 @@ class Article(BaseModel):
         with sqlite3.connect(os.getenv("DATABASE_NAME", "database.db")) as con:
             cur = con.cursor()
             cur.execute(
-                "INSERT INTO ARTICLES (id,author,title,content) VALUES(?,?,?,?)",
+                "INSERT INTO articles (id,author,title,content) VALUES(?, ?, ?, ?)",
                 (self.id, self.author, self.title, self.content)
             )
             con.commit()
@@ -78,10 +79,9 @@ class Article(BaseModel):
 
     @classmethod
     def create_table(cls, database_name="database.db"):
-        con = sqlite3.connect(database_name)
+        conn = sqlite3.connect(database_name)
 
-        con.execute(
-            "CREATE TABLE IF NOT EXITS articles (id TEXT, author TEXT, title TEXT, content TEXT)"
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS articles (id TEXT, author TEXT, title TEXT, content TEXT)"
         )
-
-        con.close()
+        conn.close()
