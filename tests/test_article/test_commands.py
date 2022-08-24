@@ -10,9 +10,9 @@ def test_create_article():
     THEN a new Article must exist in the database with the same attributes
     """
     cmd = CreateArticleCommand(
-        author="john@doe.com",
-        title="New Article",
-        content="Super awesome article"
+        author="johddffferfn@doe.com",
+        title="fff dddArtddicle",
+        content="Suffper dddaweerferfsome article"
     )
 
     article = cmd.execute()
